@@ -1,0 +1,1 @@
+"""Omnifolio AI backend — FastAPI application package."""

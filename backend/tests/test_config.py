@@ -25,12 +25,14 @@ class TestSettingsDefaults:
         settings = Settings()
         assert settings.LLM_MODEL == "openai/gpt-4o-mini"
 
-    def test_default_database_url(self):
+    def test_default_database_url(self, monkeypatch):
+        monkeypatch.delenv("DATABASE_URL", raising=False)
         settings = Settings()
         assert "postgresql+asyncpg://" in settings.DATABASE_URL
         assert "omnifolio" in settings.DATABASE_URL
 
-    def test_default_redis_url(self):
+    def test_default_redis_url(self, monkeypatch):
+        monkeypatch.setenv("REDIS_URL", "redis://localhost:6379/0")
         settings = Settings()
         assert settings.REDIS_URL == "redis://localhost:6379/0"
 

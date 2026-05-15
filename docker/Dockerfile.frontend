@@ -1,0 +1,35 @@
+# Dockerfile.frontend
+# Multi-stage build for Omnifolio AI frontend
+
+# ── Stage 1: Builder ─────────────────────────────────────
+FROM node:20-alpine AS builder
+
+WORKDIR /build
+
+# Copy package manifests first for layer caching
+COPY frontend/package.json frontend/package-lock.json* ./
+
+# Install deps — use ci if lockfile exists, fallback to install
+RUN if [ -f package-lock.json ]; then npm ci; else npm install --prefer-offline; fi
+
+# Copy frontend source
+COPY frontend/ ./
+
+RUN npm run build
+
+# ── Stage 2: Runtime ─────────────────────────────────────
+FROM node:20-alpine AS runtime
+
+WORKDIR /app
+
+COPY --from=builder /build/.next ./.next
+COPY --from=builder /build/package.json ./
+COPY --from=builder /build/public ./public
+COPY --from=builder /build/next.config.js ./
+
+EXPOSE 3001
+
+ENV PORT=3001
+ENV HOSTNAME=0.0.0.0
+
+CMD ["npm", "run", "start"]
