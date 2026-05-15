@@ -1,0 +1,1 @@
+"""Ingestion package — semantic mapper, CSV/PDF pipelines."""

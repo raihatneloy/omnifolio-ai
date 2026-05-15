@@ -1,0 +1,1 @@
+"""Models package — Pydantic v2 models for the application."""
