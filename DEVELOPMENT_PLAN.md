@@ -83,10 +83,12 @@
   ├── .env.example
   ├── README.md
   ├── DEVELOPMENT_PLAN.md
-  └── QA_DISCUSSION.md
-  ```
+  ├── QA_DISCUSSION.md
+```
+
+### Chunk 0.1 — Directory Scaffolding ✅
+- **Status:** 🟢 Completed — committed `b9bee01`
 - **Deliverable:** Empty directory tree with `.gitkeep` files where needed.
-- **Test:** `find` command shows expected structure.
 
 ### Chunk 0.2 — Backend Configuration & Secrets
 - Create `backend/app/core/config.py` using Pydantic `BaseSettings`:
