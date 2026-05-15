@@ -437,7 +437,7 @@
 
 | Chunk | Status | Approved? |
 |-------|--------|-----------|
-| 0.1 Directory Scaffolding | ⬜ Not started | ❌ |
+| 0.1 Directory Scaffolding | 🟢 Completed | ✅ | `b9bee01` |
 | 0.2 Backend Config & Secrets | ⬜ Not started | ❌ |
 | 0.3 Database Layer | ⬜ Not started | ❌ |
 | 0.4 Pydantic v2 Models | ⬜ Not started | ❌ |
