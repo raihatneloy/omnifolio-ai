@@ -9,6 +9,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.core.config import get_settings
+from app.routes import health, holdings, review, transactions, upload
 
 settings = get_settings()
 
@@ -29,7 +30,19 @@ app = FastAPI(
 )
 
 
+# ── Register routers ─────────────────────────────────────────────────────────
+
+app.include_router(health.router)
+app.include_router(holdings.router)
+app.include_router(transactions.router)
+app.include_router(upload.router)
+app.include_router(review.router)
+
+
+# ── Health check (keepalive root) ────────────────────────────────────────────
+
+
 @app.get("/health")
 async def health_check():
-    """Health check endpoint."""
+    """Root health check — mirrors the /health endpoint for load balancer probes."""
     return {"status": "ok"}
