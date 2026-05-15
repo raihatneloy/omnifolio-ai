@@ -435,10 +435,10 @@
 
 ## Tracking
 
-| Chunk | Status | Approved? |
-|-------|--------|-----------|
-| 0.1 Directory Scaffolding | 🟢 Completed | ✅ | `b9bee01` |
-| 0.2 Backend Config & Secrets | ⬜ Not started | ❌ |
+| # | Chunk | Status | Approved | Commit |
+|---|-------|--------|----------|--------|
+| 0.1 | Directory Scaffolding | 🟢 Completed | ✅ | `b9bee01` |
+| 0.2 | Backend Config & Secrets | 🟢 Completed | ✅ | `004aa38` |
 | 0.3 Database Layer | ⬜ Not started | ❌ |
 | 0.4 Pydantic v2 Models | ⬜ Not started | ❌ |
 | 0.5 Backend Package Structure | ⬜ Not started | ❌ |
