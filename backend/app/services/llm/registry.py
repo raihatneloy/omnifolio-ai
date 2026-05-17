@@ -120,6 +120,9 @@ class ProviderRegistry:
     # ── Introspection ──────────────────────────────────────────
 
 
+    def list_keys(self) -> list[str]:
+        return list(self._providers.keys())
+
     def list_enabled(self) -> list[str]:
         return [k for k, c in self._providers.items() if c.enabled]
 

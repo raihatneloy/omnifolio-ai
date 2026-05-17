@@ -278,6 +278,6 @@ class TestGlobalRegistry:
 
     def test_can_register_on_global(self) -> None:
         p = DummyProvider()
-        llm_registry.register("test_global", p)
-        assert llm_registry.get("test_global") is p
-        llm_registry.unregister("test_global")  # clean up
+        llm_registry.registry.register("test_global", p)
+        assert llm_registry.registry.get("test_global") is p
+        llm_registry.registry.unregister("test_global")  # clean up
