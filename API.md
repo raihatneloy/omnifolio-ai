@@ -4,7 +4,7 @@
 > - Swagger UI: `http://localhost:8000/docs`
 > - ReDoc: `http://localhost:8000/redoc`
 > - OpenAPI JSON: `http://localhost:8000/openapi.json`
->
+
 > This document supplements the auto-generated docs with human-readable descriptions and usage examples.
 
 ---
@@ -16,6 +16,7 @@
 3. [Transactions](#3-transactions)
 4. [Upload](#4-upload)
 5. [Review](#5-review)
+6. [LLM Provider Registry](#6-llm-provider-registry)
 
 ---
 
@@ -235,6 +236,11 @@ Poll the status of an ingestion job.
 > ⚠️ Currently a stub. Real job queue wired in **Phase 1** (Chunk 1.5) using Redis/Celery.
 
 **Response** `200 OK` — placeholder `IngestionResult`.
+```json
+{
+  "status": "pending"
+}
+```
 
 ---
 
@@ -246,7 +252,7 @@ Approve or reject AI-generated ingestion results before they are persisted.
 
 List all ingestion results awaiting human review.
 
-> ⚠️ Currently returns an empty array. Real DB query wired in **Phase 1** (Chunk 1.6), filtering by `needs_review=True`.
+> ⚠️ Currently returns an empty array. Real DB query wired in ** Phase 1** (Chunk 1.6), filtering by `needs_review=True`.
 
 **Response** `200 OK`
 ```json
@@ -275,6 +281,42 @@ Reject and discard an ingestion result.
 
 ---
 
+## 6. LLM Provider Registry
+
+Internal service for managing multiple LLM providers. This section describes the data models used by the ingestion pipeline.
+
+### `LLMResponse` (Data Model)
+
+Standardized response object for all LLM providers.
+
+**Properties:**
+- `content`: (string) The actual text response from the model.
+- `model`: (string) The identifier of the model that generated the response.
+- `tokens_used`: (integer | null) Total tokens consumed by the request.
+- `raw`: (object | null) The raw JSON response from the provider for debugging.
+
+### `LLMError` (Error Model)
+
+Exception hierarchy for LLM-related failures.
+
+**Subtypes:**
+- `AuthenticationError`: Invalid API key or unauthorized access.
+- `RateLimitError`: Provider rate limit exceeded (trigger for backoff retry).
+- `ModelNotFoundError`: Requested model is unavailable or not found.
+- `RegistryError`: Failure in provider registration or lookup.
+
+### `ProviderRegistry` (Service)
+
+The singleton registry that manages provider lifecycles.
+
+**Core Methods:**
+- `register(key, provider, enabled=True, description="")`: Adds a provider to the registry.
+- `get(key, include_disabled=False)`: Retrieves a provider by key.
+- `get_default()`: Returns the first enabled provider.
+- `registry_status()`: Returns a summary of all registered providers.
+
+---
+
 ## Appendix: Enums
 
 ### `AssetType`
@@ -282,9 +324,10 @@ Reject and discard an ingestion result.
 | Value | Description |
 |-------|-------------|
 | `equity` | Common stocks, ADRs |
-| `bond` | Fixed income securities |
+| `bond` | Fixed income and securities |
 | `etf` | Exchange-traded funds |
 | `crypto` | Digital assets (BTC, ETH, etc.) |
+| `bond` | Fixed income and securities |
 | `option` | Options and derivatives |
 | `mutual_fund` | Actively managed funds |
 
@@ -294,6 +337,7 @@ Reject and discard an ingestion result.
 |-------|-------------|
 | `buy` | Opening purchase |
 | `sell` | Closing sale |
+| ` tidak` | Internal transfer in/out |
 | `dividend` | Cash distribution |
 | `fee` | Account or transaction fee |
 | `transfer` | Internal transfer in/out |
@@ -305,3 +349,4 @@ Reject and discard an ingestion result.
 | Date | Commit | Change |
 |------|--------|--------|
 | 2026-05-15 | `05f0536` | Initial API: health, holdings CRUD, transactions CRUD, upload stub, review stub |
+| 2026-05-17 | `chunk-1.1` | Added LLM Provider Registry (Base, Registry, OpenRouter) |
